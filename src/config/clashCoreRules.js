@@ -28,8 +28,10 @@ export const BROAD_FALLBACK_RULE_PROVIDERS = new Set([
 	'cn-ip'
 ]);
 
-export function generateLoyalsoldierClashRuleProviders() {
-	return Object.fromEntries(Object.entries(PROVIDERS).map(([name, definition]) => [name, {
+export function generateLoyalsoldierClashRuleProviders({ includeReject = false } = {}) {
+	return Object.fromEntries(Object.entries(PROVIDERS)
+		.filter(([name]) => includeReject || name !== 'loyalsoldier-reject')
+		.map(([name, definition]) => [name, {
 		type: 'http',
 		behavior: definition.behavior,
 		format: 'yaml',
@@ -39,15 +41,15 @@ export function generateLoyalsoldierClashRuleProviders() {
 	}]));
 }
 
-export function generateLoyalsoldierClashRules(translator) {
+export function generateLoyalsoldierClashRules(translator, { includeReject = false } = {}) {
 	const nonChina = translator('outboundNames.Non-China');
 	const china = translator('outboundNames.Location:CN');
 
 	return {
 		guardRules: [
-			'RULE-SET,loyalsoldier-reject,REJECT',
+			'RULE-SET,loyalsoldier-applications,DIRECT',
 			'RULE-SET,loyalsoldier-private,DIRECT',
-			'RULE-SET,loyalsoldier-applications,DIRECT'
+			...(includeReject ? ['RULE-SET,loyalsoldier-reject,REJECT'] : [])
 		],
 		routingRules: [
 			// Proxy must precede direct: the upstream lists can overlap.

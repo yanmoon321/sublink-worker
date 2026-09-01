@@ -45,15 +45,32 @@ export const CLASH_CONFIG = {
 		'fake-ip-filter': [
 			'*.lan',
 			'*.local',
-			'localhost.ptlogin2.qq.com'
+			'+.home.arpa',
+			'localhost.ptlogin2.qq.com',
+			'+.srv.nintendo.net',
+			'+.stun.playstation.net',
+			'+.msftconnecttest.com',
+			'+.msftncsi.com',
+			'+.xboxlive.com',
+			'xbox.*.microsoft.com',
+			'stun.*',
+			'stun.*.*',
+			'stun.*.*.*',
+			'*.stun.*',
+			'*.stun.*.*',
+			'*.stun.*.*.*',
+			'*.battlenet.com.cn',
+			'*.battlenet.com',
+			'*.blzstatic.cn',
+			'*.battle.net'
 		],
 		'default-nameserver': [
 			'223.5.5.5',
 			'1.12.12.12'
 		],
 		'nameserver': [
-			'https://1.1.1.1/dns-query#RULES',
-			'https://8.8.8.8/dns-query#RULES'
+			'https://1.1.1.1/dns-query',
+			'https://8.8.8.8/dns-query'
 		],
 		'proxy-server-nameserver': [
 			// Bootstrap only: these resolvers see node hostnames, never normal

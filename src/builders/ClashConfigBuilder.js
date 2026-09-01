@@ -674,16 +674,30 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
     formatConfig() {
         const rules = this.generateRules();
         const useMrs = supportsMrsFormat(this.userAgent);
+        const selectedRuleNames = typeof this.selectedRules === 'string'
+            ? (PREDEFINED_RULE_SETS[this.selectedRules] || [])
+            : (Array.isArray(this.selectedRules) ? this.selectedRules : []);
+        const includeAdBlock = selectedRuleNames.includes('Ad Block');
         const { site_rule_providers, ip_rule_providers } = generateClashRuleSets(this.selectedRules, this.customRules, useMrs);
         this.config['rule-providers'] = {
-            ...generateLoyalsoldierClashRuleProviders(),
+            ...generateLoyalsoldierClashRuleProviders({ includeReject: includeAdBlock }),
             ...site_rule_providers,
             ...ip_rule_providers
         };
-        const ruleResults = emitClashRules(rules, this.t);
+        const customRuleResults = emitClashRules(
+            rules.filter(rule => rule.is_custom),
+            this.t
+        );
+        const ruleResults = emitClashRules(
+            rules.filter(rule => !rule.is_custom),
+            this.t
+        );
         const specificRuleResults = ruleResults.filter(rule => !isBroadFallbackRule(rule));
         const broadFallbackRuleResults = ruleResults.filter(isBroadFallbackRule);
-        const { guardRules, routingRules } = generateLoyalsoldierClashRules(this.t);
+        const { guardRules, routingRules } = generateLoyalsoldierClashRules(
+            this.t,
+            { includeReject: includeAdBlock }
+        );
 
         // Add proxy-providers if we have any
         if (this.providerUrls.length > 0) {
@@ -697,6 +711,7 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
         this.validateProxyGroups();
 
         this.config.rules = [
+            ...customRuleResults,
             ...guardRules,
             ...specificRuleResults,
             ...routingRules,
