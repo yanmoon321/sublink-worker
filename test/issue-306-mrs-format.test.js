@@ -151,11 +151,23 @@ proxies:
       const providers = config['rule-providers'];
       expect(providers).toBeDefined();
 
-      // 所有provider都应该使用yaml格式
-      Object.entries(providers).forEach(([name, provider]) => {
+      // MetaCubeX service providers should use the legacy YAML variant.
+      // Loyalsoldier baseline providers are YAML payloads whose published URL
+      // intentionally ends in .txt.
+      Object.entries(providers)
+        .filter(([name]) => !name.startsWith('loyalsoldier-'))
+        .forEach(([name, provider]) => {
         expect(provider.format).toBe('yaml');
         expect(provider.url).toContain('.yaml');
       });
+
+      Object.entries(providers)
+        .filter(([name]) => name.startsWith('loyalsoldier-'))
+        .forEach(([name, provider]) => {
+          expect(provider.format).toBe('yaml');
+          expect(provider.url).toContain('Loyalsoldier/clash-rules@release/');
+          expect(provider.url).toContain('.txt');
+        });
     });
   });
 });

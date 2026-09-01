@@ -17,6 +17,11 @@ export const UNIFIED_RULES = [
 		ip_rules: []
 	},
 	{
+		name: 'Private',
+		site_rules: [],
+		ip_rules: ['private']
+	},
+	{
 		name: 'Bilibili',
 		site_rules: ['bilibili'],
 		ip_rules: []
@@ -30,16 +35,6 @@ export const UNIFIED_RULES = [
 		name: 'Google',
 		site_rules: ['google'],
 		ip_rules: ['google']
-	},
-	{
-		name: 'Private',
-		site_rules: [],
-		ip_rules: ['private']
-	},
-	{
-		name: 'Location:CN',
-		site_rules: ['geolocation-cn', 'cn'],
-		ip_rules: ['cn']
 	},
 	{
 		name: 'Telegram',
@@ -95,6 +90,13 @@ export const UNIFIED_RULES = [
 		name: 'Non-China',
 		site_rules: ['geolocation-!cn'],
 		ip_rules: []
+	},
+	{
+		// Keep the broad China collections last.  Some upstream domain sets
+		// overlap, so the proxy/non-China decision must win first.
+		name: 'Location:CN',
+		site_rules: ['geolocation-cn', 'cn'],
+		ip_rules: ['cn']
 	}
 ];
 

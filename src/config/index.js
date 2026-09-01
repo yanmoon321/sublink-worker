@@ -34,6 +34,14 @@ export {
 	generateClashRuleSets
 } from './ruleGenerators.js';
 
+// Clash/mihomo baseline routing
+export {
+	BROAD_FALLBACK_RULE_PROVIDERS,
+	generateLoyalsoldierClashRuleProviders,
+	generateLoyalsoldierClashRules,
+	isBroadFallbackRule
+} from './clashCoreRules.js';
+
 // Subconverter Config
 export { generateSubconverterConfig } from './subconverterConfig.js';
 

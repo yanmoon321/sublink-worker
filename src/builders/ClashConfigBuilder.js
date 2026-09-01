@@ -1,5 +1,15 @@
 import yaml from 'js-yaml';
-import { CLASH_CONFIG, generateRules, generateClashRuleSets, getOutbounds, PREDEFINED_RULE_SETS, DIRECT_DEFAULT_RULES } from '../config/index.js';
+import {
+    CLASH_CONFIG,
+    generateRules,
+    generateClashRuleSets,
+    generateLoyalsoldierClashRuleProviders,
+    generateLoyalsoldierClashRules,
+    getOutbounds,
+    isBroadFallbackRule,
+    PREDEFINED_RULE_SETS,
+    DIRECT_DEFAULT_RULES
+} from '../config/index.js';
 import { BaseConfigBuilder } from './BaseConfigBuilder.js';
 import { deepCopy, groupProxiesByCountry, buildCountryNameFilter } from '../utils.js';
 import { addProxyWithDedup } from './helpers/proxyHelpers.js';
@@ -666,10 +676,14 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
         const useMrs = supportsMrsFormat(this.userAgent);
         const { site_rule_providers, ip_rule_providers } = generateClashRuleSets(this.selectedRules, this.customRules, useMrs);
         this.config['rule-providers'] = {
+            ...generateLoyalsoldierClashRuleProviders(),
             ...site_rule_providers,
             ...ip_rule_providers
         };
         const ruleResults = emitClashRules(rules, this.t);
+        const specificRuleResults = ruleResults.filter(rule => !isBroadFallbackRule(rule));
+        const broadFallbackRuleResults = ruleResults.filter(isBroadFallbackRule);
+        const { guardRules, routingRules } = generateLoyalsoldierClashRules(this.t);
 
         // Add proxy-providers if we have any
         if (this.providerUrls.length > 0) {
@@ -683,7 +697,12 @@ export class ClashConfigBuilder extends BaseConfigBuilder {
         this.validateProxyGroups();
 
         this.config.rules = [
-            ...ruleResults,
+            ...guardRules,
+            ...specificRuleResults,
+            ...routingRules,
+            ...broadFallbackRuleResults,
+            'GEOIP,private,DIRECT,no-resolve',
+            `GEOIP,CN,${this.t('outboundNames.Location:CN')},no-resolve`,
             `MATCH,${this.t('outboundNames.Fall Back')}`
         ];
 
