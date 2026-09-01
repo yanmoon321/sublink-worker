@@ -48,16 +48,18 @@ export const CLASH_CONFIG = {
 			'localhost.ptlogin2.qq.com'
 		],
 		'default-nameserver': [
-			'1.1.1.1',
-			'8.8.8.8'
+			'223.5.5.5',
+			'1.12.12.12'
 		],
 		'nameserver': [
 			'https://1.1.1.1/dns-query#RULES',
 			'https://8.8.8.8/dns-query#RULES'
 		],
 		'proxy-server-nameserver': [
-			'https://1.1.1.1/dns-query',
-			'https://8.8.8.8/dns-query'
+			// Bootstrap only: these resolvers see node hostnames, never normal
+			// browsing queries.  They must be reachable before a proxy exists.
+			'https://223.5.5.5/dns-query',
+			'https://1.12.12.12/dns-query'
 		]
 	},
 	'proxies': [],

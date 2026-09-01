@@ -71,7 +71,10 @@ describe('modern Clash/mihomo defaults', () => {
       'https://1.1.1.1/dns-query#RULES',
       'https://8.8.8.8/dns-query#RULES'
     ]);
+    expect(config.dns['proxy-server-nameserver']).toEqual([
+      'https://223.5.5.5/dns-query',
+      'https://1.12.12.12/dns-query'
+    ]);
     expect(serialized).not.toContain('120.53.53.53');
-    expect(serialized).not.toContain('223.5.5.5');
   });
 });
