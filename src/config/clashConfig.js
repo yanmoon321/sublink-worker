@@ -29,13 +29,6 @@ export const CLASH_CONFIG = {
 		'store-selected': true,
 		'store-fake-ip': true
 	},
-	'sniffer': {
-		// This WeChat mini-program uses HTTPDNS with an intentionally unresolvable
-		// SNI, so keep its original destination instead of overriding it.
-		'skip-domain': [
-			'marscdnbypass-wxapp.tc.qq.com'
-		]
-	},
 	'rule-providers': {
 		// 将由代码自动生成
 	},
