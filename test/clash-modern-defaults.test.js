@@ -112,4 +112,10 @@ describe('modern Clash/mihomo defaults', () => {
     ]));
     expect(serialized).not.toContain('120.53.53.53');
   });
+
+  it('preserves the original destination for the affected WeChat HTTPDNS host', async () => {
+    const config = await buildConfig();
+
+    expect(config.sniffer['skip-domain']).toContain('marscdnbypass-wxapp.tc.qq.com');
+  });
 });
