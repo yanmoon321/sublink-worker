@@ -20,6 +20,7 @@ describe('selectedRules backward compatibility', () => {
         const result = parseSelectedRules('balanced');
         expect(result).toEqual(PREDEFINED_RULE_SETS.balanced);
         expect(result.length).toBeGreaterThan(PREDEFINED_RULE_SETS.minimal.length);
+        expect(result).toContain('Social Media');
     });
 
     it('should accept "comprehensive" preset name', () => {

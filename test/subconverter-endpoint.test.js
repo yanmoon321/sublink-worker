@@ -310,9 +310,11 @@ describe('GET /subconverter', () => {
             const res = await app.request('http://localhost/subconverter');
             expect(res.status).toBe(200);
             const text = await res.text();
-            // balanced preset includes Google and Youtube
+            // balanced preset includes core services and social media
             expect(text).toContain('GEOSITE,google');
             expect(text).toContain('GEOSITE,youtube');
+            expect(text).toContain('GEOSITE,facebook');
+            expect(text).toContain('GEOSITE,tiktok');
         });
     });
 });
