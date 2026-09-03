@@ -19,8 +19,18 @@ describe('selectedRules backward compatibility', () => {
     it('should accept "balanced" preset name', () => {
         const result = parseSelectedRules('balanced');
         expect(result).toEqual(PREDEFINED_RULE_SETS.balanced);
-        expect(result.length).toBeGreaterThan(PREDEFINED_RULE_SETS.minimal.length);
-        expect(result).toContain('Social Media');
+        expect(result).toEqual([
+            'AI Services',
+            'Google',
+            'Telegram',
+            'Microsoft',
+            'Apple',
+            'Social Media',
+            'Streaming',
+            'Gaming',
+            'Non-China',
+            'Location:CN'
+        ]);
     });
 
     it('should accept "comprehensive" preset name', () => {

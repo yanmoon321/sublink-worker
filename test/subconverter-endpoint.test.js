@@ -34,7 +34,7 @@ describe('GET /subconverter', () => {
         const res = await app.request('http://localhost/subconverter');
         const text = await res.text();
 
-        // balanced preset includes Google, Youtube, AI Services, Telegram, etc.
+        // balanced preset includes the curated service, media, gaming, and regional rules
         PREDEFINED_RULE_SETS.balanced.forEach(ruleName => {
             // Each selected rule should produce at least one ruleset line
             // (either GEOSITE or GEOIP)
@@ -43,8 +43,13 @@ describe('GET /subconverter', () => {
 
         // Check for specific rules from balanced set
         expect(text).toContain('GEOSITE,google');
-        expect(text).toContain('GEOSITE,youtube');
         expect(text).toContain('GEOIP,telegram');
+        expect(text).toContain('GEOSITE,microsoft');
+        expect(text).toContain('GEOSITE,apple');
+        expect(text).toContain('GEOSITE,facebook');
+        expect(text).not.toContain('GEOSITE,youtube');
+        expect(text).not.toContain('GEOSITE,github');
+        expect(text).not.toContain('GEOIP,private');
     });
 
     it('accepts minimal preset', async () => {
@@ -310,11 +315,16 @@ describe('GET /subconverter', () => {
             const res = await app.request('http://localhost/subconverter');
             expect(res.status).toBe(200);
             const text = await res.text();
-            // balanced preset includes core services and social media
+            // balanced preset matches the curated default selection
             expect(text).toContain('GEOSITE,google');
-            expect(text).toContain('GEOSITE,youtube');
             expect(text).toContain('GEOSITE,facebook');
             expect(text).toContain('GEOSITE,tiktok');
+            expect(text).toContain('GEOSITE,microsoft');
+            expect(text).toContain('GEOSITE,apple');
+            expect(text).not.toContain('GEOSITE,youtube');
+            expect(text).not.toContain('GEOSITE,github');
+            expect(text).toContain('GEOIP,telegram');
+            expect(text).not.toContain('GEOIP,private');
         });
     });
 });
